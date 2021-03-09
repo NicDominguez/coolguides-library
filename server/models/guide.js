@@ -4,9 +4,9 @@ const Schema = mongoose.Schema;
 const guideSchema = new Schema({
   title: String,
   imageURL: String,
-  postDate: Date,
+  postDate: String,
   author: String,
-  tags: [String],
+  tags: String,
 });
 
 module.exports = mongoose.model("Guide", guideSchema);

@@ -10,7 +10,7 @@ const app = express();
 app.use(cors());
 
 mongoose.connect(
-  "mongodb+srv://Nic_Dominguez:RFQoCsNXrJ72U8Yn@Cluster0.lgzud.mongodb.net/GraphQL-tutorial?retryWrites=true&w=majority",
+  "mongodb+srv://Nic_Dominguez:RFQoCsNXrJ72U8Yn@coolguideslibrary.apest.mongodb.net/CoolGuidesDatabase?retryWrites=true&w=majority",
   { useNewUrlParser: true, useUnifiedTopology: true }
 );
 mongoose.connection.once("open", () => {

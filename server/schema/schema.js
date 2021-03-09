@@ -1,11 +1,10 @@
 const graphql = require("graphql");
-const _ = require("lodash");
-const Book = require("../models/book");
-const Author = require("../models/author");
+const Guide = require("../models/guide");
 
 const {
   GraphQLObjectType,
   GraphQLString,
+  GraphQLDate,
   GraphQLSchema,
   GraphQLID,
   GraphQLInt,
@@ -13,103 +12,61 @@ const {
   GraphQLNonNull,
 } = graphql;
 
-const BookType = new GraphQLObjectType({
-  name: "Book",
+const GuideType = new GraphQLObjectType({
+  name: "Guide",
   fields: () => ({
     id: { type: GraphQLID },
-    name: { type: GraphQLString },
-    genre: { type: GraphQLString },
-    author: {
-      type: AuthorType,
-      resolve(parent, args) {
-        return Author.findById(parent.authorId);
-      },
-    },
-  }),
-});
-
-const AuthorType = new GraphQLObjectType({
-  name: "Author",
-  fields: () => ({
-    id: { type: GraphQLID },
-    name: { type: GraphQLString },
-    age: { type: GraphQLInt },
-    books: {
-      type: new GraphQLList(BookType),
-      resolve(parent, args) {
-        return Book.find({ authorId: parent.id });
-      },
-    },
+    title: { type: GraphQLString },
+    imageURL: { type: GraphQLString },
+    postDate: { type: GraphQLString },
+    author: { type: GraphQLString },
+    tags: { type: GraphQLString },
   }),
 });
 
 const RootQuery = new GraphQLObjectType({
   name: "RootQueryType",
   fields: {
-    book: {
-      type: BookType,
+    guide: {
+      type: GuideType,
       args: {
         id: { type: GraphQLID },
       },
       resolve(parent, args) {
-        return Book.findById(args.id);
+        return Guide.findById(args.id);
       },
     },
-    author: {
-      type: AuthorType,
-      args: {
-        id: { type: GraphQLID },
-      },
+    guides: {
+      type: new GraphQLList(GuideType),
       resolve(parent, args) {
-        return Author.findById(args.id);
+        return Guide.find({});
       },
     },
-    books: {
-      type: new GraphQLList(BookType),
-      resolve(parent, args) {
-        return Book.find({});
-      },
-    },
-    authors: {
-      type: new GraphQLList(AuthorType),
-      resolve(parent, args) {
-        return Author.find({});
-      },
-    },
+    // need to do a guides query based on tag name
   },
 });
 
 const Mutation = new GraphQLObjectType({
   name: "Mutation",
   fields: {
-    addAuthor: {
-      type: AuthorType,
+    addGuide: {
+      type: GuideType,
       args: {
-        name: { type: new GraphQLNonNull(GraphQLString) },
-        age: { type: new GraphQLNonNull(GraphQLInt) },
+        title: { type: new GraphQLNonNull(GraphQLString) },
+        imageURL: { type: new GraphQLNonNull(GraphQLString) },
+        postDate: { type: new GraphQLNonNull(GraphQLString) },
+        author: { type: new GraphQLNonNull(GraphQLString) },
+        tags: { type: new GraphQLNonNull(GraphQLString) },
       },
       resolve(parent, args) {
-        let author = new Author({
-          name: args.name,
-          age: args.age,
+        let guide = new Guide({
+          title: args.title,
+          imageURL: args.imageURL,
+          postDate: args.postDate,
+          author: args.author,
+          tags: args.tags,
         });
-        return author.save();
-      },
-    },
-    addBook: {
-      type: BookType,
-      args: {
-        name: { type: new GraphQLNonNull(GraphQLString) },
-        genre: { type: new GraphQLNonNull(GraphQLString) },
-        authorId: { type: new GraphQLNonNull(GraphQLID) },
-      },
-      resolve(parent, args) {
-        let book = new Book({
-          name: args.name,
-          genre: args.genre,
-          authorId: args.authorId,
-        });
-        return book.save();
+        return guide.save();
       },
     },
   },
