@@ -11,7 +11,7 @@ app.use(cors());
 
 mongoose.connect(
   "mongodb+srv://Nic_Dominguez:RFQoCsNXrJ72U8Yn@coolguideslibrary.apest.mongodb.net/CoolGuidesDatabase?retryWrites=true&w=majority",
-  { useNewUrlParser: true, useUnifiedTopology: true }
+  { useNewUrlParser: true, useUnifiedTopology: true, useFindAndModify: false }
 );
 mongoose.connection.once("open", () => {
   console.log("connected to database");

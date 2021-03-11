@@ -20,7 +20,7 @@ const GuideType = new GraphQLObjectType({
     imageURL: { type: GraphQLString },
     postDate: { type: GraphQLString },
     author: { type: GraphQLString },
-    tags: { type: GraphQLString },
+    tags: { type: GraphQLList(GraphQLString) },
   }),
 });
 
@@ -36,13 +36,21 @@ const RootQuery = new GraphQLObjectType({
         return Guide.findById(args.id);
       },
     },
-    guides: {
+    allGuides: {
       type: new GraphQLList(GuideType),
       resolve(parent, args) {
         return Guide.find({});
       },
     },
-    // need to do a guides query based on tag name
+    guidesByTag: {
+      type: new GraphQLList(GuideType),
+      args: {
+        tagsQuery: { type: GraphQLString },
+      },
+      resolve(parent, args) {
+        return Guide.find({ tags: { $in: args.tagsQuery } });
+      },
+    },
   },
 });
 
@@ -56,7 +64,7 @@ const Mutation = new GraphQLObjectType({
         imageURL: { type: new GraphQLNonNull(GraphQLString) },
         postDate: { type: new GraphQLNonNull(GraphQLString) },
         author: { type: new GraphQLNonNull(GraphQLString) },
-        tags: { type: new GraphQLNonNull(GraphQLString) },
+        tags: { type: new GraphQLNonNull(GraphQLList(GraphQLString)) },
       },
       resolve(parent, args) {
         let guide = new Guide({
@@ -67,6 +75,32 @@ const Mutation = new GraphQLObjectType({
           tags: args.tags,
         });
         return guide.save();
+      },
+    },
+    updateGuide: {
+      type: GuideType,
+      args: {
+        id: { type: new GraphQLNonNull(GraphQLID) },
+        title: { type: new GraphQLNonNull(GraphQLString) },
+        imageURL: { type: new GraphQLNonNull(GraphQLString) },
+        postDate: { type: new GraphQLNonNull(GraphQLString) },
+        author: { type: new GraphQLNonNull(GraphQLString) },
+        tags: { type: new GraphQLNonNull(GraphQLList(GraphQLString)) },
+      },
+      resolve(parent, args) {
+        return Guide.findByIdAndUpdate(
+          args.id,
+          {
+            title: args.title,
+            imageURL: args.imageURL,
+            postDate: args.postDate,
+            author: args.author,
+            tags: args.tags,
+          },
+          {
+            new: true,
+          }
+        );
       },
     },
   },

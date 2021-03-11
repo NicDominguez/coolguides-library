@@ -6,7 +6,7 @@ const guideSchema = new Schema({
   imageURL: String,
   postDate: String,
   author: String,
-  tags: String,
+  tags: [String],
 });
 
 module.exports = mongoose.model("Guide", guideSchema);
