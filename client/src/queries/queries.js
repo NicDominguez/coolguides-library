@@ -2,7 +2,7 @@ import { gql } from "@apollo/client";
 
 const getAllGuidesQuery = gql`
   {
-    guides {
+    allGuides {
       id
       title
       imageURL
@@ -22,7 +22,6 @@ const getGuideQuery = gql`
       postDate
       author
       tags
-      }
     }
   }
 `;
@@ -36,21 +35,20 @@ const getGuidesByTagQuery = gql`
       postDate
       author
       tags
-      }
     }
   }
 `;
 
 const addGuideMutation = gql`
-  mutation(
+  mutation addGuide(
     $title: String!
     $imageURL: String!
     $postDate: String!
     $author: String!
-    $tags: String!
+    $tags: [String]!
   ) {
     addGuide(
-      name: $title
+      title: $title
       imageURL: $imageURL
       postDate: $postDate
       author: $author
@@ -66,16 +64,16 @@ const addGuideMutation = gql`
   }
 `;
 
-const udpateGuideMutation = gql`
-  mutation(
+const updateGuideMutation = gql`
+  mutation updateGuide(
     $title: String!
     $imageURL: String!
     $postDate: String!
     $author: String!
-    $tags: String!
+    $tags: [String]!
   ) {
     updateGuide(
-      name: $title
+      title: $title
       imageURL: $imageURL
       postDate: $postDate
       author: $author
@@ -93,8 +91,8 @@ const udpateGuideMutation = gql`
 
 export {
   getAllGuidesQuery,
-  addGuideMutation,
   getGuideQuery,
   getGuidesByTagQuery,
-  udpateGuideMutation,
+  addGuideMutation,
+  updateGuideMutation,
 };

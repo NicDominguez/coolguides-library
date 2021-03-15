@@ -4,10 +4,8 @@ const Guide = require("../models/guide");
 const {
   GraphQLObjectType,
   GraphQLString,
-  GraphQLDate,
   GraphQLSchema,
   GraphQLID,
-  GraphQLInt,
   GraphQLList,
   GraphQLNonNull,
 } = graphql;
