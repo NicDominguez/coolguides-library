@@ -1,8 +1,11 @@
-import React from "react";
+import React, { useState } from "react";
 import { useQuery } from "@apollo/client";
 import { getGuideQuery } from "../queries/queries";
 
+import UpdateGuide from "./UpdateGuide";
+
 function GuideDetails(props) {
+  const [showUpdateForm, setShowUpdateFrom] = useState(false);
   const { loading, error, data } = useQuery(getGuideQuery, {
     variables: { id: props.guideId },
   });
@@ -27,7 +30,13 @@ function GuideDetails(props) {
             <p>{guide.tags}</p>
             <img src={guide.imageURL} alt={guide.title}></img>
           </div>
-          <button>Update Guide</button>
+          <button
+            onClick={() => {
+              setShowUpdateFrom(true);
+            }}
+          >
+            Update Guide
+          </button>
         </div>
       );
     } else {
@@ -35,7 +44,12 @@ function GuideDetails(props) {
     }
   };
 
-  return <div id="book-details">{displayGuideDetails()}</div>;
+  return (
+    <div id="book-details">
+      {displayGuideDetails()}
+      {showUpdateForm && <UpdateGuide />}
+    </div>
+  );
 }
 
 export default GuideDetails;

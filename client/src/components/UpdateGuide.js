@@ -1,7 +1,7 @@
 import React from "react";
 import { useMutation } from "@apollo/client";
 
-import { addGuideMutation, getAllGuidesQuery } from "../queries/queries";
+import { updateGuideMutation, getGuideQuery } from "../queries/queries";
 
 //Salad Guide
 //https://i.redd.it/opr525vfqhm61.jpg
@@ -9,8 +9,8 @@ import { addGuideMutation, getAllGuidesQuery } from "../queries/queries";
 //NoelaniSpell
 //food
 
-function AddGuide() {
-  const [addGuide, { called, error }] = useMutation(addGuideMutation);
+function UpdateGuide() {
+  const [updateGuide, { called, error }] = useMutation(updateGuideMutation);
   const [state, setState] = React.useState({
     title: "",
     imageURL: "",
@@ -21,7 +21,7 @@ function AddGuide() {
 
   const submitForm = async (e) => {
     e.preventDefault();
-    await addGuide({
+    await updateGuide({
       variables: {
         title: state.title,
         imageURL: state.imageURL,
@@ -29,13 +29,13 @@ function AddGuide() {
         author: state.author,
         tags: state.tags,
       },
-      refetchQueries: [{ query: getAllGuidesQuery }],
+      refetchQueries: [{ query: getGuideQuery }],
     });
     console.log(called, error);
   };
 
   return (
-    <form id="add-guide" onSubmit={submitForm}>
+    <form id="update-guide" onSubmit={submitForm}>
       <div className="field">
         <label>Guide Title:</label>
         <input
@@ -92,9 +92,9 @@ function AddGuide() {
           value={state.tags}
         />
       </div>
-      <button type="submit">+</button>
+      <button type="submit">Update</button>
     </form>
   );
 }
 
-export default AddGuide;
+export default UpdateGuide;

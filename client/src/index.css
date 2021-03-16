@@ -30,13 +30,20 @@ body {
   color: #880e4f;
 }
 
-form {
+#add-guide {
   background: #fff;
   padding: 20px;
   position: fixed;
   left: 0;
   bottom: 0;
   width: 400px;
+}
+
+#update-guide {
+  background: #fff;
+  padding: 20px;
+  width: 400px;
+  color: black;
 }
 
 form .field {
